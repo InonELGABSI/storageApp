@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Frontend Mentor - Fylo data storage component">
+    <meta name="keywords" content="Fylo data storage component, Frontend Mentor">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="styles.css" rel="stylesheet">
+    </link>
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <title>Fylo data storage component</title>
+</head>
+
+<body>
+    <main>
+        <!--Fylo Container -->
+        <section class="fylo-container">
+            <img class="logo" src="images/logo.svg" alt="Fylo logo" />
+            <section class="icons">
+                <div class="icon-img">
+                    <img src="images/icon-document.svg" alt="" aria-hidden="true" />
+                </div>
+                <div class="icon-img">
+                    <img src="images/icon-folder.svg" alt="" aria-hidden="true" />
+                </div>
+                <div class="icon-img">
+                    <label for="file-input">
+                        <img src="images/icon-upload.svg" id="uploud-img" alt="" aria-hidden="true" />
+                    </label>
+                    <input type="file" id="file-input" name="file-input" onchange="handleFileSelect(event)" multiple>
+                </div>
+            </section>
+        </section>
+        <!-- Storage Container -->
+        <section class="storage-container expended">
+            <h1>You've used <span id="size">70</span> <span>MB</span> of your storage</h1>
+            <div id="files"></div>
+            <!-- Progress Bar -->
+            <section class="progress-bar">
+                <div class="gradient-bar">
+                    <div class="dot-container">
+                        <div class="dot"></div>
+                    </div>
+                </div>
+            </section>
+            <h2>
+                <span>0 MB</span>
+                <span>100 MB</span>
+            </h2>
+            <button id="clear-button" onclick="clearState()">clearState</button>
+            <!-- GB left -->
+            <section class="gb-left">
+                <p>
+                <p id="left">100</p> <span>MB left</span></p>
+            </section>
+        </section>
+    </main>
+</body>
+
+<script src="script.js"></script>
+
+</html>
