@@ -3,6 +3,9 @@ function saveState(sizeNum, files) {
     localStorage.setItem('storageFiles', JSON.stringify(files));
 }
 
+//testttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
+console.log("test")
+
 
 function loadState() {
     const size = parseFloat(localStorage.getItem('storageSize')) || 0;
