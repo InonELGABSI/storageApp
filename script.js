@@ -3,9 +3,6 @@ function saveState(sizeNum, files) {
     localStorage.setItem('storageFiles', JSON.stringify(files));
 }
 
-//testttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
-console.log("test")
-
 
 function loadState() {
     const size = parseFloat(localStorage.getItem('storageSize')) || 0;
@@ -13,7 +10,6 @@ function loadState() {
 
     return { sizeNum: size, files };
 }
-
 
 
 function updateDotPosition(sizeNum) {
@@ -32,56 +28,61 @@ function openFileExplorer() {
     document.getElementById('file-input').click();
 }
 
+function updateUI(){
+    const storageState = loadState();
+    const sizeElement = document.getElementById('size');
+    sizeElement.innerText = storageState.sizeNum;
+    updateDotPosition(storageState.sizeNum);
+    updateLeft(storageState.sizeNum);
+}
+
+function createFileButton(selectedFile,selectedFileSize){
+    const filesDiv = document.getElementById("files");
+    const button = document.createElement('button');
+    button.textContent = selectedFile.name;
+    button.classList.add('file-button');
+    button.onclick = function () {
+        handleRemove(button, selectedFileSize);
+            };
+    filesDiv.appendChild(button);
+}
 
 function handleFileSelect(event) {
     const selectedFiles = event.target.files;
     const storageState = loadState();
-    const sizeElement = document.getElementById('size');
 
     for (let i = 0; i < selectedFiles.length; i++) {
         const selectedFile = selectedFiles[i];
         const selectedFileSize = Math.round((selectedFile.size / 1000000) * 100) / 100;
         const allowedTypes = ['image/jpeg','image/jpg','image/png','image/gif']
-        if(!allowedTypes.contains(selectedFile.type)){
+        if(!allowedTypes.includes(selectedFile.type)){
              alert("File format isn't supported");}
         else{
             if (storageState.sizeNum + selectedFileSize >= 100){                
                 alert("There is not enough space on the disk");}
             else{
                 storageState.sizeNum = Math.round((storageState.sizeNum + selectedFileSize) * 100) / 100;
-                sizeElement.innerText = storageState.sizeNum;
                 storageState.files.push({ name: selectedFile.name, size: selectedFileSize });
                 saveState(storageState.sizeNum, storageState.files);
-
-                updateDotPosition(storageState.sizeNum);
-                updateLeft(storageState.sizeNum);
-
-                const filesDiv = document.getElementById("files");
-                const button = document.createElement('button');
-                button.textContent = selectedFile.name;
-                button.classList.add('file-button');
-                button.onclick = function () {
-                    handleRemove(button, selectedFileSize);
-                };
-                filesDiv.appendChild(button);
+                updateUI();
+                createFileButton(selectedFile,selectedFileSize);
             } 
         }
     }
 }
 
-function updateUI(){}
-function createFileButton(){}
-function handleRemove(button, fileSize) {
-    let state = loadState();
-    state.sizeNum = Math.round((state.sizeNum - fileSize) * 100) / 100;
 
-    state.files = state.files.filter(file => file.name !== button.textContent);
-    saveState(state.sizeNum, state.files);
+function handleRemove(button, fileSize) {
+    const storageState = loadState();
+    storageState.sizeNum = Math.round((storageState.sizeNum - fileSize) * 100) / 100;
+
+    storageState.files = storageState.files.filter(file => file.name !== button.textContent);
+    saveState(storageState.sizeNum, storageState.files);
 
     const sizeElement = document.getElementById('size');
-    sizeElement.innerText = state.sizeNum;
-    updateDotPosition(state.sizeNum);
-    updateLeft(state.sizeNum);
+    sizeElement.innerText = storageState.sizeNum;
+    updateDotPosition(storageState.sizeNum);
+    updateLeft(storageState.sizeNum);
     button.style.display = 'none';
 
     document.getElementById('file-input').value = '';
@@ -89,19 +90,19 @@ function handleRemove(button, fileSize) {
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    const state = loadState();
-    updateDotPosition(state.sizeNum);
-    updateLeft(state.sizeNum);
+    const storageState = loadState();
+    updateDotPosition(storageState.sizeNum);
+    updateLeft(storageState.sizeNum);
     const sizeElement = document.getElementById('size');
-    sizeElement.innerText = state.sizeNum
+    sizeElement.innerText = storageState.sizeNum
 
     const filesDiv = document.getElementById("files");
-    state.files.forEach(file => {
+    storageState.files.forEach(file => {
         const button = document.createElement('button');
         button.textContent = file.name;
         button.classList.add('file-button');
         button.onclick = function () {
-            handleRemove(button, file.size, state.files);
+            handleRemove(button, file.size, storageState.files);
         };
 
         filesDiv.appendChild(button);
