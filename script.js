@@ -1,3 +1,4 @@
+
 function saveState(sizeNum, files) {
     localStorage.setItem('storageSize', sizeNum.toString());
     localStorage.setItem('storageFiles', JSON.stringify(files));
@@ -41,6 +42,7 @@ function createFileButton(selectedFile,selectedFileSize){
     const button = document.createElement('button');
     button.textContent = selectedFile.name;
     button.classList.add('file-button');
+    button.id=selectedFile.name;
     button.onclick = function () {
         handleRemove(button, selectedFileSize);
             };
@@ -75,37 +77,19 @@ function handleFileSelect(event) {
 function handleRemove(button, fileSize) {
     const storageState = loadState();
     storageState.sizeNum = Math.round((storageState.sizeNum - fileSize) * 100) / 100;
-
-    storageState.files = storageState.files.filter(file => file.name !== button.textContent);
+    storageState.files = storageState.files.filter(file => file.name !== button.id);
     saveState(storageState.sizeNum, storageState.files);
-
-    const sizeElement = document.getElementById('size');
-    sizeElement.innerText = storageState.sizeNum;
-    updateDotPosition(storageState.sizeNum);
-    updateLeft(storageState.sizeNum);
+    updateUI();
     button.style.display = 'none';
-
     document.getElementById('file-input').value = '';
 }
 
 
 document.addEventListener('DOMContentLoaded', function () {
+    updateUI()
     const storageState = loadState();
-    updateDotPosition(storageState.sizeNum);
-    updateLeft(storageState.sizeNum);
-    const sizeElement = document.getElementById('size');
-    sizeElement.innerText = storageState.sizeNum
-
-    const filesDiv = document.getElementById("files");
     storageState.files.forEach(file => {
-        const button = document.createElement('button');
-        button.textContent = file.name;
-        button.classList.add('file-button');
-        button.onclick = function () {
-            handleRemove(button, file.size, storageState.files);
-        };
-
-        filesDiv.appendChild(button);
+        createFileButton(file,file.size)
     });
 });
 
