@@ -49,6 +49,8 @@ function createFileButton(selectedFile,selectedFileSize){
     filesDiv.appendChild(button);
 }
 
+//////////////////////////////test 
+
 function handleFileSelect(event) {
     const selectedFiles = event.target.files;
     const storageState = loadState();
